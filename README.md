@@ -119,3 +119,17 @@ Se pueden dividir en dos tipos: Funcionales y no funcionales.
 - Prueba de estrés
 - Usabilidad
 - Seguridad
+
+## Coverage report
+
+El coverage report es un reporte que nos muestra el porcentaje de código que esta cubierto por las pruebas unitarias.
+
+En jest podemos generar este reporte con el siguiente comando:
+
+```bash
+jest --coverage
+```
+
+En instituciones como Federal Aviation Administration e ISO se exige que el código tenga un coverage report de 100%. En otras compañías como Google, Facebook o AirBnb con que el coverage report sea de 80% o superior ya es suficiente.
+
+**100% coverage report no significa que el código este libre de errores.**

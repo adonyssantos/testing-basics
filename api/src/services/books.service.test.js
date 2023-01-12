@@ -6,12 +6,12 @@ const mockBooks = generateBooks(3);
 
 // Spies
 const mockGetAll = jest.fn();
+const mockCreate = jest.fn();
 
 // Stubs
-
 jest.mock('../lib/mongo.lib', () => jest.fn().mockImplementation(() => ({
   getAll: mockGetAll,
-  create: () => Promise.resolve(mockBooks[0]),
+  create: mockCreate,
 })));
 
 describe('Tests for BooksService', () => {
@@ -38,7 +38,7 @@ describe('Tests for BooksService', () => {
       expect(books.length).toBe(3);
     });
 
-    test('should return a list of the BOOKS_MOCK', async () => {
+    test('should return a list of the mockBook', async () => {
       expect(books).toEqual(mockBooks);
     });
 
@@ -49,19 +49,26 @@ describe('Tests for BooksService', () => {
     });
   });
 
-  // describe('createBook', () => {
-  //   let book;
+  describe('createBook', () => {
+    let book;
 
-  //   beforeEach(async () => {
-  //     book = await service.createBook(BOOKS_MOCK[0]);
-  //   });
+    beforeEach(async () => {
+      mockCreate.mockResolvedValue(mockBooks[0]);
+      book = await service.createBook(mockBooks[0]);
+    });
 
-  //   test('should create object book', async () => {
-  //     expect(book).toBeInstanceOf(Object);
-  //   });
+    test('should return an Object instance data', async () => {
+      expect(book).toBeInstanceOf(Object);
+    });
 
-  //   test("should create a book with name Harry Potter and the Sorcerer's stone", async () => {
-  //     expect(book.name).toBe("Harry Potter and the Sorcerer's stone");
-  //   });
-  // });
+    test('should return the mockBook', async () => {
+      expect(book).toEqual(mockBooks[0]);
+    });
+
+    test('should been called getAll method one time and with the params', () => {
+      expect(mockCreate).toHaveBeenCalled();
+      expect(mockCreate).toHaveBeenCalledWith('books', mockBooks[0]);
+      expect(mockCreate).toHaveBeenCalledTimes(1);
+    });
+  });
 });

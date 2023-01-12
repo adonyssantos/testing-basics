@@ -14,11 +14,7 @@ const Accordion: React.FC<AccordionProps> = ({ title, children }) => {
 
   return (
     <section>
-       <h3
-          onClick={toggleIsOpen}
-        >{title}</h3>
-
-      {/* <h3
+      <h3
         onClick={toggleIsOpen}
         style={{
           cursor: "pointer",
@@ -26,7 +22,7 @@ const Accordion: React.FC<AccordionProps> = ({ title, children }) => {
       >
         {title}
       </h3>
-      {isOpen && <section>{children}</section>} */}
+      {isOpen && <section>{children}</section>}
     </section>
   );
 };

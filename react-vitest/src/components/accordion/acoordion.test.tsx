@@ -2,49 +2,48 @@ import Accordion from "./accordion";
 import { render, screen, fireEvent } from "@testing-library/react";
 
 describe("Accordion", () => {
-  let title: HTMLElement;;
+  let getTitle: () => HTMLElement;
+  let getContent: () => HTMLElement | null;
+
+  beforeAll(() => {
+    getTitle = () => screen.getByText(/Accordion Title/i);
+    getContent = () => screen.queryByText(/content/i);
+  });
 
   beforeEach(() => {
     render(
-      <Accordion title="Hello">
-        <p>Lorem ipsum dolor</p>
-        <p>Sit amet consectetur</p>
+      <Accordion title="Accordion Title">
+        <p>This is the Accordion content</p>
       </Accordion>
     );
-
-    title = screen.getByText(/Hello/i);
   });
 
   test("should show the title all time", () => {
-    expect(title).toBeDefined();
-    fireEvent.click(title);
-    expect(title).toBeDefined();
+    expect(getTitle()).toBeDefined();
+    fireEvent.click(getTitle());
+    expect(getTitle()).toBeDefined();
   });
 
-  test("should not show the children in the first render", () => {
-    expect(screen.queryByText(/Lorem/i)).toBeNull();
+  test("should not show the content in the first render", () => {
+    expect(getContent()).toBeNull();
   });
 
   test("should show the children when the title is clicked", () => {
-    const content = screen.queryByText(/Lorem/i);
+    fireEvent.click(getTitle());
 
-    fireEvent.click(title);
-
-    expect(content).toBeDefined();
-    expect(content).not.toBeNull();
+    console.log(getContent());
+    expect(getContent()).toBeDefined();
+    expect(getContent()).not.toBeNull();
   });
 
   test("should hide the children when the title is clicked twice", () => {
-    const content = screen.queryByText(/Lorem/i);
+    fireEvent.click(getTitle());
 
-    fireEvent.click(title);
+    expect(getContent()).toBeDefined();
+    expect(getContent()).not.toBeNull();
 
-    expect(content).toBeDefined();
-    expect(content).not.toBeNull();
+    fireEvent.click(getTitle());
 
-    fireEvent.click(title);
-
-    expect(content).toBeNull();
-    expect(content).not.toBeDefined();
+    expect(getContent()).toBeNull();
   });
 });

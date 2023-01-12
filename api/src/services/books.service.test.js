@@ -1,20 +1,8 @@
 const BooksService = require('./books.service');
+const { generateBooks } = require('../fakes/book.fake');
 
-// Fake
-const BOOKS_MOCK = [
-  {
-    _id: '5e6b9e7e7b6d1d2a58c7b5a1',
-    name: "Harry Potter and the Sorcerer's stone",
-  },
-  {
-    _id: '5e6b9e7e7b6d1d2a58c7b5a2',
-    name: 'Canción de hielo y fuego',
-  },
-  {
-    _id: '5e6b9e7e7b6d1d2a58c7b5a3',
-    name: 'El señor de los anillos',
-  },
-];
+// Fakes
+const mockBooks = generateBooks(3);
 
 // Spies
 const mockGetAll = jest.fn();
@@ -23,7 +11,7 @@ const mockGetAll = jest.fn();
 
 jest.mock('../lib/mongo.lib', () => jest.fn().mockImplementation(() => ({
   getAll: mockGetAll,
-  create: () => Promise.resolve(BOOKS_MOCK[0]),
+  create: () => Promise.resolve(mockBooks[0]),
 })));
 
 describe('Tests for BooksService', () => {
@@ -38,7 +26,7 @@ describe('Tests for BooksService', () => {
     let books;
 
     beforeEach(async () => {
-      mockGetAll.mockResolvedValue(BOOKS_MOCK);
+      mockGetAll.mockResolvedValue(mockBooks);
       books = await service.getBooks({});
     });
 
@@ -51,7 +39,7 @@ describe('Tests for BooksService', () => {
     });
 
     test('should return a list of the BOOKS_MOCK', async () => {
-      expect(books).toEqual(BOOKS_MOCK);
+      expect(books).toEqual(mockBooks);
     });
 
     test('should been called getAll method one time and with the params', async () => {
